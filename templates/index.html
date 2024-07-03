@@ -1,14 +1,15 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seu Nome - Loja E-commerce</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Loja E-commerce</title>
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
 </head>
 <body>
     <header>
-        <h1>Seu Nome</h1>
+        <h1>Pystore</h1>
         <nav>
             <ul>
                 <li><a href="#">Início</a></li>
@@ -35,7 +36,7 @@
             <h2>Nossos produtos</h2>
             <div class="produtos-grid">
                 <div class="produto">
-                    <img src="produto1.jpg" alt="Produto 1">
+                    <img src="pro" alt="Produto 1">
                     <h3>Nome do Produto 1</h3>
                     <p>Descrição breve do produto 1.</p>
                     <span class="preco">R$ 100,00</span>
