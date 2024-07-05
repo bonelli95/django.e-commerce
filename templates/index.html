@@ -8,11 +8,12 @@
 </head>
 <body>
     <header>
+        <img src="{% static 'media/banner/logo.jpg' %}" alt="logo" class="logo">
         <h1>Pystore</h1>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Categorys</a></li>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
                 <li><a href="#">Brand</a></li>
                 <li><a href="#">Bag</a></li>
             </ul>
