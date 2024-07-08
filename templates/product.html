@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Pystore</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'categories' %}">Categories</a></li>
+                <li><a href="#">Brand</a></li>
+                <li><a href="#">Bag</a></li>
+            </ul>
+        </nav></br>
+        <form action="#">
+            <input type="search" placeholder="Search products">
+            <button type="submit">Search</button>
+        </form>
+    </header>
+
+
+    <footer>
+        <p>&copy; 2024 Seu Nome - Loja E-commerce</p>
+        <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Contato</a></li>
+        </ul>
+    </footer>
+</body>
+</html>
