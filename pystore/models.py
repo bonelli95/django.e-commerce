@@ -1,11 +1,12 @@
 from django.db import models
+from django.utils.html import mark_safe
 
 class Banner(models.Model):
-    img = models.CharField(max_length=200)
+    img = models.ImageField(upload_to="banner_img/")
     alt_text = models.CharField(max_length=250)
 
     def __str__(self):
-        return self.img
+        return self.alt_text
     
 class Category(models.Model):
     title = models.CharField(max_length=150, null=False, blank=True, default="")
@@ -32,7 +33,7 @@ class Color(models.Model):
         return self.title
 
 class Size(models.Model):
-    title = models.CharField(max_length=10)
+    title = models.CharField(max_length=20)
 
     def __str__(self):
         return self.title
@@ -48,6 +49,7 @@ class Product(models.Model):
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
     size = models.ForeignKey(Size, on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
+    is_featured_product = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
