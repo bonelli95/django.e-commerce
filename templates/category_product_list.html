@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </head>
+    <header>
+        <h1>Pystore</h1>
+        <nav>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'index' %}">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'brand' %}">Brand</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Bag</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fa fa-user"></i> My account
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        
+                        <a class="dropdown-item" href="">Login</a>
+                        <a class="dropdown-item" href="">Register</a>
+                        <a class="dropdown-item" href="">Logout</a>
+                    </div>
+                   </li>
+            </ul>
+        </nav></br>
+        <nav class="navbar navbar-light bg-light">
+            <form class="form-inline d-flex">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-sm btn-outline-primary" type="submit">Search</button>
+            </form>
+          </nav>
+    </header>
+<main class="container my-4">
+	<div class="row">
+		<div class="col-md-3">
+			{% include 'filters.html' %}
+		</div>
+		<div class="col-md-9">
+			
+			<h3 class="mb-4 border-bottom pb-1">Products</h3>
+			<div class="row" id="filteredProducts">
+				<p class="ajaxLoader">Loading...</p>
+				{% for product in data %}
+				<div class="col-lg-4 col-md-6 mb-4 product-box">
+					<div class="card shadow">
+					  <a href="/product/{{product.slug}}/{{ product.id }}/{{ product.productattribute_set.first.price }}"><img src="/media/{{ product.image }}" class="card-img-top" alt="{{product.title}}"></a>
+					  <div class="card-body">
+					    <h5 class="card-text"><a href="/product/{{ product.slug }}/{{product.id}}/{{ product.productattribute_set.first.price }}">{{ product.title }}</a></h5>
+              {% for attribute in product.productattribute_set.all %}
+					      <h6>${{ attribute.price }} <span class=""></span></h6>
+              {% endfor %}
+					  </div>
+					  	<div class="card-footer">
+				         
+							  	<button class="btn btn-sm btn-primary add-to-cart" data-index=""><i class="fa fa-shopping-cart"></i></button>
+							  	<button class="btn btn-sm btn-danger"><i class="fa fa-heart"></i></button>
+							  	<span class="float-right">
+							  		4.5/5
+							  		<i class="fa fa-star text-warning"></i>
+							  	</span>
+					  	</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<p class="my-4 text-center"><button id="loadMore" data-total="" data-limit="3" class="btn btn-dark btn-sm">Load + <i class="fa fa-sync load-more-icon"></i></button></p>
+		</div>
+	</div>
+    <footer>
+        <p>&copy; 2024 Seu Nome - Loja E-commerce</p>
+        <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Contato</a></li>
+        </ul>
+    </footer>
+</main>
+</html> 

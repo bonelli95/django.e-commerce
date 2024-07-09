@@ -22,8 +22,19 @@
             <button type="submit">Search</button>
         </form>
     </header>
-
-
+    <section class="produtos">
+        <h3>Categories</h3>
+            {% if data %}
+            <div class="produtos-grid">
+                {% for cat in data %}
+                    <div class="produto">
+                        <a href="category_product_list/{{ cat.id }}"><img src="/media/{{ cat.image }}" alt="{{cat.title}}"></a>
+                        <h4><a href="#">{{cat.title}}</a></h4>
+                    </div>
+                    {% endfor %}
+            </div>
+            {% endif %}
+    </section>
     <footer>
         <p>&copy; 2024 Seu Nome - Loja E-commerce</p>
         <ul>
