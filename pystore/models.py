@@ -25,6 +25,9 @@ class Color(models.Model):
     title = models.CharField(max_length=50)
     color_code = models.CharField(max_length=50)
 
+    def color_tag_path(self):
+        return mark_safe(self.color_code)
+        
     def __str__(self):
         return self.title
 
