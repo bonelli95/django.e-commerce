@@ -1,42 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <header>
-        <h1>Pystore</h1>
-        <nav>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'index' %}">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'brand' %}">Brand</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Bag</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-user"></i> My account
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        
-                        <a class="dropdown-item" href="">Login</a>
-                        <a class="dropdown-item" href="">Register</a>
-                        <a class="dropdown-item" href="">Logout</a>
-                    </div>
-                   </li>
-            </ul>
-        </nav></br>
-        <nav class="navbar navbar-light bg-light">
-            <form class="form-inline d-flex">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-sm btn-outline-primary" type="submit">Search</button>
-            </form>
-          </nav>
-    </header>
     <main>
         <section class="banner">
             <img src = "{% static 'media/banner/banner.jpg' %}" alt="banner">
@@ -62,12 +26,4 @@
         </section>
         <p class="my-4 text-center"><a href="{% url 'product' %}" class="btn btn-dark btn-sm">All Products <i class="fa fa-long-arrow-alt-right"></i></a></p>
     </main>
-    <footer>
-        <p>&copy; 2024 Seu Nome - Loja E-commerce</p>
-        <ul>
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Contato</a></li>
-        </ul>
-    </footer>
 {% endblock %}

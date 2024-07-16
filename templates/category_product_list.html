@@ -1,49 +1,7 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </head>
-    <header>
-        <h1>Pystore</h1>
-        <nav>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'index' %}">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'categories' %}">Categories</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'brand' %}">Brand</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Bag</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fa fa-user"></i> My account
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        
-                        <a class="dropdown-item" href="">Login</a>
-                        <a class="dropdown-item" href="">Register</a>
-                        <a class="dropdown-item" href="">Logout</a>
-                    </div>
-                   </li>
-            </ul>
-        </nav></br>
-        <nav class="navbar navbar-light bg-light">
-            <form class="form-inline d-flex">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-sm btn-outline-primary" type="submit">Search</button>
-            </form>
-          </nav>
-    </header>
+{% block content %}
+
 <main class="container my-4">
 	<div class="row">
 		<div class="col-md-3">
@@ -80,13 +38,5 @@
 			<p class="my-4 text-center"><button id="loadMore" data-total="" data-limit="3" class="btn btn-dark btn-sm">Load + <i class="fa fa-sync load-more-icon"></i></button></p>
 		</div>
 	</div>
-    <footer>
-        <p>&copy; 2024 Seu Nome - Loja E-commerce</p>
-        <ul>
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Contato</a></li>
-        </ul>
-    </footer>
-</main>
-</html> 
+
+{% endblock %}
