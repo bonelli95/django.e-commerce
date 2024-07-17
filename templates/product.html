@@ -21,7 +21,7 @@
 					  <div class="card-body">
 					    <h5 class="card-text"><a href="/product/{{ product.slug }}/{{product.id}}/{{ product.productattribute_set.first.price }}">{{ product.title }}</a></h5>
               {% for attribute in product.productattribute_set.all %}
-					      <h6>${{ attribute.price }} <span class=""></span></h6>
+					      <h6>€{{ attribute.price }} <span class=""></span></h6>
               {% endfor %}
 					  </div>
 					  	<div class="card-footer">
