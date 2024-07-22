@@ -10,10 +10,18 @@
             <div class="produtos-grid">
                 {% for cat in data %}
                     <div class="produto">
-                        <a href="category_product_list/{{ cat.id }}"><img src="/media/{{ cat.image }}" alt="{{cat.title}}"></a>
+                        <a href="chosen-category/{{ cat.id }}"><img src="/media/{{ cat.image }}" alt="{{cat.title}}"></a>
                         <h4><a href="#">{{cat.title}}</a></h4>
                     </div>
                     {% endfor %}
+                    <div class="produtos-grid">
+                {% for category_type, _ in categories_types %}
+                    <div class="produto">
+                        <a href="{% url 'chosen-category/' %}?type{{ category_type }}"><img src="{% static 'media/' %}{{ category_type }}.png" alt="{{ category_type }}"></a>
+                        <h4><a href="#">{{category_type.title}}</a></h4>
+                    </div>
+                    {% endfor %}
+            </div>
             </div>
             {% endif %}
     </section> 
