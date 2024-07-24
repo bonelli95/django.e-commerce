@@ -6,9 +6,9 @@ def index(request):
     return render(request, 'index.html', {'data': data})
 
 def categories(request):
-    categories_type = ChosenCategory.CATEGORY_CHOICES
+    category_type = ChosenCategory.CATEGORY_CHOICES
     data = Category.objects.all().order_by('-id')
-    context = {'categories_type': categories_type, 'data': data}
+    context = {'category_type': category_type, 'data': data}
     return render(request, 'categories.html', context)
 
 def brand(request):
@@ -34,15 +34,11 @@ def product(request):
         'dataAtt':dataAtt,
     })
 
-def category_product_list(request, cat_id):
-  category = Category.objects.get(id=cat_id)
-  data = Product.objects.filter(category=category).order_by('-id')
-  return render(request, 'category_product_list.html', {'data': data})
 
 def chosen_category(request):
-    category_type = request.GET.get('type')
-    if category_type:
-        categories = ChosenCategory.objects.filter(category_type=category_type)
+    cat_type = request.GET.get('type')
+    if cat_type:
+        categories = ChosenCategory.objects.filter(cat_type=cat_type)
     else:
         categories = ChosenCategory.objects.all()
-    return render(request, 'chosen_category.hmtl', {'category' : categories})
+    return render(request, 'chosen_category.hmtl', {'cat':categories})
