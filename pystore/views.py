@@ -1,15 +1,13 @@
 from django.shortcuts import render
-from pystore.models import Banner, Category, Brand, Color, Size, Product, ProductAttribute, ChosenCategory
+from pystore.models import Banner, Category, Brand, Color, Size, Product, ProductAttribute
 
 def index(request):
     data = Product.objects.filter(is_featured_product = True).order_by('-id')
     return render(request, 'index.html', {'data': data})
 
 def categories(request):
-    category_type = ChosenCategory.CATEGORY_CHOICES
     data = Category.objects.all().order_by('-id')
-    context = {'category_type': category_type, 'data': data}
-    return render(request, 'categories.html', context)
+    return render(request, 'category_product_list.html', {'data': data})
 
 def brand(request):
     data = Brand.objects.all().order_by('-id')
@@ -34,11 +32,7 @@ def product(request):
         'dataAtt':dataAtt,
     })
 
-
-def chosen_category(request):
-    cat_type = request.GET.get('type')
-    if cat_type:
-        categories = ChosenCategory.objects.filter(cat_type=cat_type)
-    else:
-        categories = ChosenCategory.objects.all()
-    return render(request, 'chosen_category.hmtl', {'cat':categories})
+def category_product_list(request, cat_id):
+   category = Category.objects.get(pk=cat_id)
+   data = Product.objects.filter(category=category).order_by('-id')
+   return render(request, 'category_product_list.html', {'data': data})

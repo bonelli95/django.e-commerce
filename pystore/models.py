@@ -62,25 +62,3 @@ class ProductAttribute(models.Model):
 
     def __str__(self):
         return self.product.title
-    
-class ChosenCategory(models.Model):
-    CAP = 'cap'
-    PANTS = 'pants'
-    SNEAKERS = 'sneakers'
-    T_SHIRT = 't-shirt'
-
-    CATEGORY_CHOICES = [
-        (CAP, 'cap'),
-        (PANTS, 'pants'),
-        (SNEAKERS, 'sneakers'),
-        (T_SHIRT, 't-shirt'),
-    ]
-
-    title = models.CharField(max_length=50, null=False, blank=False)
-    title2 = models.CharField(max_length=100, null=False, blank=False)
-    description = models.TextField(null=False, blank=False)
-    image = models.ImageField(upload_to="photos/", blank=True)
-    category_type = models.CharField(max_length=20, choices=CATEGORY_CHOICES,  default=T_SHIRT)
-
-    def __str__(self):
-        return f'ChosenCategory [title={self.title}]'
