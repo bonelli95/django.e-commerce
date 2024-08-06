@@ -6,17 +6,16 @@
 </section>
 <section class="produtos">
 	<h3 class="mb-4 border-bottom pb-1">Products</h3>
-		<p class="ajaxLoader">Loading...</p>
 			<div class="produtos-grid">
 				{% for product in data %}
 				<div class="produto">
-					<a href="/product/{{product.slug}}/{{ product.id }}/{{ product.productattribute_set.first.price }}"><img src="/media/{{ product.image }}" alt="{{product.title}}"></a>
-					<h5><a href="/product/{{ product.slug }}/{{product.id}}/{{ product.productattribute_set.first.price }}">{{ product.title }}</a></h5>
+					<a href="/category_product_list/{{ product.id }}{{ product.productattribute_set.first.price }}"><img src="/media/{{ product.image }}" alt="{{ product.title }}"></a>
+					<h5><a href="/product/{{ product.slug }}/{{ product.id }}/{{ product.productattribute_set.first.price }}">{{ product.title }}</a></h5>
               	{% for attribute in product.productattribute_set.all %}
-				</div>
-					<h6>€{{ attribute.price }} <span class=""></span></h6>
+				  <h6>€{{ attribute.price }} <span class=""></span></h6>
               	{% endfor %}
-			</div>
+				</div>
 				{% endfor %}
+			</div>
 </section>
 {% endblock %}
