@@ -18,7 +18,7 @@ def product(request):
     color = Product.objects.distinct().values('color__title', 'color__id', 'color__color_code')
     sizes = ProductAttribute.objects.distinct().values('size__title', 'size__id')
 
-    return render(request, 'product.html',
+    return render(request, 'pystore/product.html',
     {
         'data': data,
         'category': category,
