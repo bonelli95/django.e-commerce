@@ -6,6 +6,11 @@
             <img src = "{% static 'media/banner/banner.jpg' %}" alt="banner">
         </section>
         <section class="produtos">
+            {% for message in messages %}
+              <div class="alert alert-primary">
+                <p id='message'> {{ message }}</p>
+              </div>
+            {% endfor %}
             <h2>Featured Products</h2>
             <div class="produtos-grid">
                 {% for product in data %}
