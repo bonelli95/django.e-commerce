@@ -42,7 +42,7 @@ class registerForms(forms.Form):
         label = 'Email',
         required = True,
         max_length = 30,
-        widget = forms.PasswordInput(
+        widget = forms.EmailInput(
             attrs= {
                 'class' :"form-control form-control-lg",
                 'placeholder' : 'Register your email'
