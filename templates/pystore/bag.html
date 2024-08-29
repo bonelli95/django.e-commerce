@@ -1,0 +1,43 @@
+{% extends 'pystore/base.html' %}
+{% load static %}
+{% block content %}
+<section class="banner">
+    <img src = "{% static 'media/banner/banner.jpg' %}" alt="banner">
+</section>
+
+<body>
+    <div class="grafismo-azul"></div>
+    <section class="adicionar-produto">
+      <h1 class="produtos"><span class="texto-azul">Bag</span></h1>
+      <form class="formulario">
+
+          <section class="botoes-wrapper">
+            <button onclick="adicionar()" type="button" class="botao-form botao-adicionar">Adicionar</button>
+            <button onclick="limpar()" type="button" class="botao-form botao-limpar">Limpar</button>
+          </section>
+        </section>
+      </form>
+    </section>
+    <section class="carrinho">
+      <img src="" alt="Imagem de um carrinho de compras cinza">
+
+      <div class="titulo-wrapper">
+        <img src="" alt="ícone de carrinho">
+
+        <h2 class="carrinho__titulo">Produtos no carrinho</h2>
+      </div>
+
+      <section class="carrinho__produtos" id="lista-produtos">
+        <section class="carrinho__produtos__produto">
+          <span class="texto-azul">1x</span> Celular <span class="texto-azul">R$1400</span>
+        </section>
+      </section>
+
+      <div class="divisoria"></div>
+
+      <p class="carrinho__total">
+        Total: <span class="texto-azul" id="valor-total">R$1400</span>
+      </p>
+    </section>
+</body>
+{% endblock%}

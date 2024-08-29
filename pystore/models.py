@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.html import mark_safe
+from django.contrib.auth.models import User
 
 class Banner(models.Model):
     img = models.ImageField(upload_to="banner_img/")
@@ -62,3 +63,18 @@ class ProductAttribute(models.Model):
 
     def __str__(self):
         return self.product.title
+    
+class Bag(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    items = models.ManyToManyField('Product', through='ItemBag')
+
+    def __str__(self):
+        return f'Bag for {self.user}'
+
+class ItemBag(models.Model):
+    bag = models.ForeignKey(Bag, on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1) 
+
+    def __str__(self):
+        return f'{self.quantity} of {self.product} in {self.bag}'

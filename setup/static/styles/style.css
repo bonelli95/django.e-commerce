@@ -124,3 +124,76 @@ nav li {
 .produto .btn:hover {
   opacity: 0.7;
 }
+/* BAG */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.adicionar-produto,
+.carrinho {
+  padding: 20px;
+}
+
+/* Formulário */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.campo-grupo {
+  display: flex;
+  align-items: center;
+}
+
+.texto-medio-azul {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.botao-form {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.botao-adicionar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.botao-limpar {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Carrinho */
+.carrinho {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.carrinho__produtos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.divisoria {
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+/* Responsividade (Exemplo) */
+@media (max-width: 768px) {
+  .adicionar-produto,
+  .carrinho {
+    padding: 10px;
+  }
+}
