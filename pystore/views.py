@@ -39,14 +39,14 @@ def bag(request, product_id):
     quantity = int(request.POST.get('quantity', 1))
 
     if quantity <= 0:
-        return redirect('bag', product.id) 
+        return redirect('bag', product_id) 
 
     bag = request.session.get('bag', {})
 
-    if product_id in list(bag.keys()):
+    if product_id in bag:
         bag[product_id] += quantity
     else:
         bag[product_id] = quantity
+    request.session['bag'] = bag
 
-    request.session['bag']= bag
     return redirect('bag')
