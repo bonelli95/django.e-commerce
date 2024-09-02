@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from pystore.models import Banner, Category, Color, Size, Product, ProductAttribute, Bag, ItemBag
 
 def index(request):
@@ -33,20 +33,62 @@ def category_product_list(request, cat_id):
    data = Product.objects.filter(category=category).order_by('-id')
    return render(request, 'pystore/category_product_list.html', {'data': data})
 
-def bag(request, product_id):
-    product = Product.objects.get(id=product_id)
+def bag(request, product_id=None):
+    if product_id is not None:
+        product = get_object_or_404(Product, id=product_id)
+        quantity = int(request.POST.get('quantity', 1))
 
-    quantity = int(request.POST.get('quantity', 1))
+        if quantity <= 0:
+            return redirect('bag_add', product_id=product_id)
+        
+        product_attribute = ProductAttribute.objects.filter(product=product).first()
+        if not product_attribute:
+            return redirect('bag')
 
-    if quantity <= 0:
-        return redirect('bag', product_id) 
+        bag = request.session.get('bag', {})
 
-    bag = request.session.get('bag', {})
+        attribute_id = str(product_attribute.id)
+        if attribute_id in bag:
+            if isinstance(bag[attribute_id], dict):
+                bag[attribute_id]['quantity'] += quantity
+            else:
+                existing_quantity = bag[attribute_id] if isinstance(bag[attribute_id], int) else 0
+                bag[attribute_id] = {
+                    'product_id': product.id,
+                    'quantity': existing_quantity + quantity,
+                    'price': float(product_attribute.price),
+                }
+        else:
+            bag[attribute_id] = {
+                'product_id': product.id,
+                'quantity': quantity,
+                'price': float(product_attribute.price),
+            }
 
-    if product_id in bag:
-        bag[product_id] += quantity
+        request.session['bag'] = bag
+        return redirect('bag')
     else:
-        bag[product_id] = quantity
-    request.session['bag'] = bag
+        bag = request.session.get('bag', {})
+        bag_items = []
 
-    return redirect('bag')
+        for attribute_id, item_data in bag.items():
+            if isinstance(item_data, dict):
+                product = get_object_or_404(Product, id=item_data['product_id'])
+                product_attribute = get_object_or_404(ProductAttribute, id=attribute_id)
+                bag_items.append({
+                    'product': product,
+                    'quantity': item_data['quantity'],
+                    'price': item_data['price'],
+                    'total_price': item_data['price'] * item_data['quantity'],
+                })
+            else:
+                print(f"Erro: item_data para attribute_id {attribute_id} não é um dicionário.")
+
+        total_price = sum(item['total_price'] for item in bag_items)
+
+        context = {
+            'bag_items': bag_items,
+            'total_price': total_price,
+        }
+
+        return render(request, 'pystore/bag.html', context)

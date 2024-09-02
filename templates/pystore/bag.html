@@ -12,8 +12,8 @@
       <form class="formulario">
 
           <section class="botoes-wrapper">
-            <button onclick="adicionar()" type="button" class="botao-form botao-adicionar">Adicionar</button>
-            <button onclick="limpar()" type="button" class="botao-form botao-limpar">Limpar</button>
+            <button onclick="adicionar()" type="button" class="botao-form botao-adicionar">To add</button>
+            <button onclick="limpar()" type="button" class="botao-form botao-limpar">To clean</button>
           </section>
         </section>
       </form>
@@ -24,19 +24,25 @@
       <div class="titulo-wrapper">
         <img src="" alt="ícone de carrinho">
 
-        <h2 class="carrinho__titulo">Produtos no carrinho</h2>
+        <h2 class="carrinho__titulo">Products in the bag</h2>
       </div>
 
       <section class="carrinho__produtos" id="lista-produtos">
+        {% for item in bag_items %}
         <section class="carrinho__produtos__produto">
-          <span class="texto-azul">1x</span> Celular <span class="texto-azul">R$1400</span>
+            <span class="texto-azul">{{ item.product.name }}</span>
+            <span class="texto-azul">Quantity: {{ item.quantity }}</span>
+            <span class="texto-azul">Price: €{{ item.total_price|floatformat:2 }}</span>
         </section>
+        {% empty %}
+        <p>Your bag is empty.</p>
+        {% endfor %}
       </section>
 
       <div class="divisoria"></div>
 
       <p class="carrinho__total">
-        Total: <span class="texto-azul" id="valor-total">R$1400</span>
+        Total: <span class="texto-azul" id="valor-total">{{ total_price|floatformat:2 }}</span>
       </p>
     </section>
 </body>
