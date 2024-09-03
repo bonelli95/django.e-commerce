@@ -13,6 +13,7 @@
 					<h5><a href="/product/{{ product.slug }}/{{ product.id }}/{{ product.productattribute_set.first.price }}">{{ product.title }}</a></h5>
               	{% for attribute in product.productattribute_set.all %}
 				  <h6>€{{ attribute.price }} <span class=""></span></h6>
+				  <a href="{% url 'bag_add' product.id %}" class="btn btn-dark">Add to Bag</a>
               	{% endfor %}
 				</div>
 				{% endfor %}

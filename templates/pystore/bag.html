@@ -30,7 +30,7 @@
       <section class="carrinho__produtos" id="lista-produtos">
         {% for item in bag_items %}
         <section class="carrinho__produtos__produto">
-            <span class="texto-azul">{{ item.product.name }}</span>
+            <span class="texto-azul">Name: {{ item.product.title }}</span>
             <span class="texto-azul">Quantity: {{ item.quantity }}</span>
             <span class="texto-azul">Price: €{{ item.total_price|floatformat:2 }}</span>
         </section>
@@ -44,6 +44,9 @@
       <p class="carrinho__total">
         Total: <span class="texto-azul" id="valor-total">{{ total_price|floatformat:2 }}</span>
       </p>
+      <a href="{% url 'clear_bag' %}">
+      <button class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your bag?');">Clear Bag</button>
+      </a>
     </section>
 </body>
 {% endblock%}

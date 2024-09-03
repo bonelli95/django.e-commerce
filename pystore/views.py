@@ -92,3 +92,7 @@ def bag(request, product_id=None):
         }
 
         return render(request, 'pystore/bag.html', context)
+    
+def clear_bag(request):
+    request.session['bag'] = {}
+    return redirect('bag')
