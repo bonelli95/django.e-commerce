@@ -9,27 +9,18 @@
     <div class="grafismo-azul"></div>
     <section class="adicionar-produto">
       <h1 class="produtos"><span class="texto-azul">Bag</span></h1>
-      <form class="formulario">
-
-          <section class="botoes-wrapper">
-            <button onclick="adicionar()" type="button" class="botao-form botao-adicionar">To add</button>
-            <button onclick="limpar()" type="button" class="botao-form botao-limpar">To clean</button>
-          </section>
-        </section>
-      </form>
     </section>
     <section class="carrinho">
-      <img src="" alt="Imagem de um carrinho de compras cinza">
+      <img src="{% static 'media/logo/cart.png' %}" alt="cart">
 
       <div class="titulo-wrapper">
-        <img src="" alt="ícone de carrinho">
-
         <h2 class="carrinho__titulo">Products in the bag</h2>
       </div>
 
       <section class="carrinho__produtos" id="lista-produtos">
         {% for item in bag_items %}
         <section class="carrinho__produtos__produto">
+            <img src="{% static 'product_photos/' item.product.image %}" alt="{{ item.product.title }}">
             <span class="texto-azul">Name: {{ item.product.title }}</span>
             <span class="texto-azul">Quantity: {{ item.quantity }}</span>
             <span class="texto-azul">Price: €{{ item.total_price|floatformat:2 }}</span>

@@ -34,6 +34,7 @@ def category_product_list(request, cat_id):
    return render(request, 'pystore/category_product_list.html', {'data': data})
 
 def bag(request, product_id=None):
+    bag = request.session.get('bag', {})
     if product_id is not None:
         product = get_object_or_404(Product, id=product_id)
         quantity = int(request.POST.get('quantity', 1))
@@ -45,7 +46,7 @@ def bag(request, product_id=None):
         if not product_attribute:
             return redirect('bag')
 
-        bag = request.session.get('bag', {})
+        #bag = request.session.get('bag', {})
 
         attribute_id = str(product_attribute.id)
         if attribute_id in bag:
