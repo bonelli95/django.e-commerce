@@ -197,3 +197,8 @@ body {
     padding: 10px;
   }
 }
+
+.carrinho__produtos__produto img {
+  max-width: 8%;
+  height: auto;
+}

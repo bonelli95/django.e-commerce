@@ -81,6 +81,7 @@ def bag(request, product_id=None):
                     'quantity': item_data['quantity'],
                     'price': item_data['price'],
                     'total_price': item_data['price'] * item_data['quantity'],
+                    'image_url': product.image.url
                 })
             else:
                 print(f"Erro: item_data para attribute_id {attribute_id} não é um dicionário.")
