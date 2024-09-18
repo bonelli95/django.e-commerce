@@ -14,7 +14,7 @@
       <img src="{% static 'media/logo/cart.png' %}" alt="cart">
 
       <div class="titulo-wrapper">
-        <h2 class="carrinho__titulo">Products in the bag</h2>
+        <h1>Products in the bag</h1>
       </div>
 
       <section class="carrinho__produtos" id="lista-produtos">
@@ -28,7 +28,7 @@
             <span class="badge bg-primary text-wrap">Price: €</span>  <span class="fw-bold">{{ item.total_price|floatformat:2 }} </span>
         </section>
         {% empty %}
-        <p>Your bag is empty.</p>
+        <p class="d-inline p-2 bg-dark text-white">Your bag is empty.</p>
         {% endfor %}
       </section>
 
@@ -37,9 +37,14 @@
       <p class="carrinho__total">
         Total: <span class="texto-azul" id="valor-total">{{ total_price|floatformat:2 }}</span>
       </p>
-      <a href="{% url 'clear_bag' %}">
-      <button class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your bag?');">Clear Bag</button>
-      </a>
+      <p>
+        <a href="{% url 'clear_bag' %}">
+        <button class="btn btn-danger" onclick="return confirm('Are you sure you want to clear your bag?');">Clear Bag</button>
+        </a>
+        <a href="{% url 'buy' %}">
+          <button class="btn btn-success">Buy</button>
+        </a>
+      </p>
     </section>
 </body>
 {% endblock%}

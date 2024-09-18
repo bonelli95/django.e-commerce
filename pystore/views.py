@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from pystore.models import Banner, Category, Color, Size, Product, ProductAttribute, Bag, ItemBag
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def index(request):
     data = Product.objects.filter(is_featured_product = True).order_by('-id')
@@ -34,6 +36,9 @@ def category_product_list(request, cat_id):
    return render(request, 'pystore/category_product_list.html', {'data': data})
 
 def bag(request, product_id=None):
+    if not request.user.is_authenticated:
+        messages.error(request, 'Please log in to access this page.')
+        return redirect('login')
     bag = request.session.get('bag', {})
     if product_id is not None:
         product = get_object_or_404(Product, id=product_id)
@@ -94,6 +99,9 @@ def bag(request, product_id=None):
         }
 
         return render(request, 'pystore/bag.html', context)
+    
+def buy(request):
+    return render(request, 'pystore/buy.html')
     
 def clear_bag(request):
     request.session['bag'] = {}
