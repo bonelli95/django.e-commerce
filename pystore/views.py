@@ -98,10 +98,12 @@ def bag(request, product_id=None):
             'total_price': total_price,
         }
 
-        return render(request, 'pystore/bag.html', context)
+        return render(request, 'store/bag.html', context)
     
 def buy(request):
-    return render(request, 'pystore/buy.html')
+    bag_items = request.session.get('bag_items', [])
+    
+    return render(request, 'store/buy.html', {'bag_items': bag_items})
     
 def clear_bag(request):
     request.session['bag'] = {}
