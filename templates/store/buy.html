@@ -2,20 +2,22 @@
 {% load static %}
 {% block content %}
 
-<h2>Confirmação de Compra</h2>
-<p>Você está prestes a comprar os seguintes itens:</p>
+<h2>Purchase Confirmation</h2>
+<p>You are about to purchase the following items:</p>
 
+<section class="carrinho__produtos__produto">
 <ul>
     {% for item in bag_items %}
     <li>
         <img src="{{ item.image_url }}" alt="{{ item.product.title }}">
-        {{ item.product.title }} - Quantidade: {{ item.quantity }} - Preço: €{{ item.total_price|floatformat:2 }}
+        <strong>{{ item.product.title }}</strong> - Quantidade: {{ item.quantity }} - Preço: €{{ item.total_price|floatformat:2 }}
     </li>
     {% endfor %}
 </ul>
-
+</section>
 <form method="POST">
-    <button type="submit">Confirmar Pagamento</button>
+    {% csrf_token %}
+    <p><button type="submit" class="btn btn-success" >Confirmar Pagamento</button></p>
 </form>
 
 {% endblock %}

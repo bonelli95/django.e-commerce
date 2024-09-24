@@ -56,6 +56,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'setup.urls'
 
+STRIPE_PUBLIC_KEY = str(os.getenv('STRIPE_PUBLIC_KEY'))
+
+STRIPE_SECRET_KEY = str(os.getenv('STRIPE_SECRET_KEY'))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

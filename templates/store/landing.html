@@ -1,0 +1,159 @@
+{% extends 'pystore/base.html' %}
+{% load static %}
+{% block content %}
+<section class="banner">
+    <img src = "{% static 'media/banner/banner.jpg' %}" alt="banner">
+</section>
+<head>
+    <title>Buy cool new product</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<html>
+    <body>
+        <section>
+          <div class="product">
+            {% comment %} <img
+              src="https://i.imgur.com/EHyR2nP.png"
+              alt="The cover of Stubborn Attachments"
+            /> {% endcomment %}
+            <section class="carrinho__produtos__produto">
+              <ul>
+                  {% for item in bag_items %}
+                  <li>
+                      <img src="{{ item.image_url }}" alt="{{ item.product.title }}">
+                      <strong>{{ item.product.title }}</strong> - Quantidade: {{ item.quantity }} - Preço: €{{ item.total_price|floatformat:2 }}
+                  </li>
+                  {% endfor %}
+              </ul>
+            </section>
+          </div>
+          <button type="button" id="checkout-button" class="btn btn-success">Checkout</button>
+          <hr />
+          <h2>Checkout using custom payment flow</h2>
+          <form id="payment-form">
+            <input type="text" id="email" placeholder="Email address" />
+            <div id="card-element"></div>
+            <button id="submit">
+              <div class="spinner hidden" id="spinner"></div>
+              <span id="button-text">Pay</span>
+            </button>
+            <p id="card-error" role="alert"></p>
+            <p class="result-message hidden">
+              Payment succeeded, see the result in your
+              <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+            </p>
+          </form>
+        </section>
+        {% csrf_token %}
+      </body>
+      <script type="text/javascript">
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
+        var checkoutButton = document.getElementById('checkout-button');
+        checkoutButton.addEventListener('click', function () {
+          fetch("{% url 'create-checkout-session' product.id %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (session) {
+              return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function (result) {
+              if (result.error) {
+                alert(result.error.message);
+              }
+            })
+            .catch(function (error) {
+              console.error('Error:', error);
+            });
+        });
+    
+        document.querySelector("button").disabled = true;
+    
+        let elements = stripe.elements();
+
+        let card = elements.create("card", { style: style });
+        card.mount("#card-element");
+        card.on("change", function (event) {
+          document.querySelector("button").disabled = event.empty;
+          document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+        });
+        let form = document.getElementById("payment-form");
+        form.addEventListener("submit", function(event) {
+          event.preventDefault();
+          fetch("{% url 'create-payment-intent' product.id %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+              email: document.getElementById('email').value
+            })
+          })
+            .then(function(result) {
+              return result.json();
+            })
+            .then(function(data) {
+              payWithCard(stripe, card, data.clientSecret);
+            });
+        });
+
+        let payWithCard = function(stripe, card, clientSecret) {
+          loading(true);
+          stripe
+            .confirmCardPayment(clientSecret, {
+              payment_method: {
+                card: card
+              }
+            })
+            .then(function(result) {
+              if (result.error) {
+                showError(result.error.message);
+              } else {
+                orderComplete(result.paymentIntent.id);
+              }
+            });
+        };
+        let orderComplete = function(paymentIntentId) {
+          loading(false);
+          document
+            .querySelector(".result-message a")
+            .setAttribute(
+              "href",
+              "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+            );
+          document.querySelector(".result-message").classList.remove("hidden");
+          document.querySelector("button").disabled = true;
+        };
+        let showError = function(errorMsgText) {
+          loading(false);
+          let errorMsg = document.querySelector("#card-error");
+          errorMsg.textContent = errorMsgText;
+          setTimeout(function() {
+            errorMsg.textContent = "";
+          }, 4000);
+        };
+        let loading = function(isLoading) {
+          if (isLoading) {
+            document.querySelector("button").disabled = true;
+            document.querySelector("#spinner").classList.remove("hidden");
+            document.querySelector("#button-text").classList.add("hidden");
+          } else {
+            document.querySelector("button").disabled = false;
+            document.querySelector("#spinner").classList.add("hidden");
+            document.querySelector("#button-text").classList.remove("hidden");
+          }
+        };
+    
+    </script>
+</html>
+
+{% endblock %}

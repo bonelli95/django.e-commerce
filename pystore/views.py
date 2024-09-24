@@ -1,7 +1,15 @@
+from typing import Any
+from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from pystore.models import Banner, Category, Color, Size, Product, ProductAttribute, Bag, ItemBag
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
+from django.views import View
+from django.http import HttpRequest, JsonResponse
+from django.views.generic import TemplateView
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def index(request):
     data = Product.objects.filter(is_featured_product = True).order_by('-id')
@@ -89,7 +97,7 @@ def bag(request, product_id=None):
                     'image_url': product.image.url
                 })
             else:
-                print(f"Erro: item_data para attribute_id {attribute_id} não é um dicionário.")
+                print(f"Erro: item_data to attribute_id {attribute_id} it's not a dictionary.")
 
         total_price = sum(item['total_price'] for item in bag_items)
 
@@ -99,11 +107,73 @@ def bag(request, product_id=None):
         }
 
         return render(request, 'store/bag.html', context)
-    
+
 def buy(request):
-    bag_items = request.session.get('bag_items', [])
-    
+    bag = request.session.get('bag',{})
+    bag_items = []
+
+    for attribute_id, item_data in bag.items():
+        if isinstance(item_data, dict):
+            product = get_object_or_404(Product, id=item_data['product_id'])
+            product_attribute = get_object_or_404(ProductAttribute, id=attribute_id)
+            bag_items.append({
+                'product': product,
+                'quantity': item_data['quantity'],
+                'price': item_data['price'],
+                'total_price': item_data['price'] * item_data['quantity'],
+                'image_url': product.image.url
+            })
+
     return render(request, 'store/buy.html', {'bag_items': bag_items})
+
+class ProductLandingPageView(TemplateView):
+    template_name = 'landing.html'
+
+    def get_context_data(self, **kwargs ):
+        product = Product.objects.get('product_id')
+        context = super(ProductLandingPageView, self).get_context_data(**kwargs)
+        context.update({
+            'product': product,
+            'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY
+        })
+        return context
+          
+    
+class CreateCheckoutSessionView(View):
+    def post(self, request, *args, **kwargs):
+        product_id = self.kwargs[product_id]
+        product = Product.objects.get(id=product_id)
+        print(product)
+        YOUR_DOMAIN = 'http://127.0.0.1:8000'
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data':{
+                        'currency': 'euro',
+                        'unit_amount': product.total_price,
+                        'product_data':{
+                            'name': product.title,
+                            'images':['http://i.imgur.com/EHyR2nP.png'],
+                        },
+
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=YOUR_DOMAIN + '/success.html',
+            cancel_url=YOUR_DOMAIN + '/cancel.html',
+        )
+        return JsonResponse ({
+            'id': checkout_session.id
+        })
+    
+def success(request):
+    return render(request, 'store/success.html')
+    
+def cancel(request):
+    return render(request, 'store/cancel.html')
     
 def clear_bag(request):
     request.session['bag'] = {}
