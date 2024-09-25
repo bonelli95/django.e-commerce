@@ -10,7 +10,6 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
     <script src="https://js.stripe.com/v3/"></script>
 </head>
-<html>
     <body>
         <section>
           <div class="product">
@@ -18,7 +17,7 @@
               src="https://i.imgur.com/EHyR2nP.png"
               alt="The cover of Stubborn Attachments"
             /> {% endcomment %}
-            <section class="carrinho__produtos__produto">
+            <div class="carrinho__produtos__produto">
               <ul>
                   {% for item in bag_items %}
                   <li>
@@ -27,10 +26,15 @@
                   </li>
                   {% endfor %}
               </ul>
-            </section>
+              <div class="divisoria"></div>
+              <p class="carrinho__total">
+                Total: <span class="texto-azul" id="valor-total">{{ total_price|floatformat:2 }}</span>
+              </p>
+            </div>
           </div>
           <button type="button" id="checkout-button" class="btn btn-success">Checkout</button>
-          <hr />
+        </section>
+        {% csrf_token %}
           <h2>Checkout using custom payment flow</h2>
           <form id="payment-form">
             <input type="text" id="email" placeholder="Email address" />
@@ -45,9 +49,6 @@
               <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
             </p>
           </form>
-        </section>
-        {% csrf_token %}
-      </body>
       <script type="text/javascript">
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         var stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
@@ -75,85 +76,6 @@
             });
         });
     
-        document.querySelector("button").disabled = true;
-    
-        let elements = stripe.elements();
-
-        let card = elements.create("card", { style: style });
-        card.mount("#card-element");
-        card.on("change", function (event) {
-          document.querySelector("button").disabled = event.empty;
-          document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
-        });
-        let form = document.getElementById("payment-form");
-        form.addEventListener("submit", function(event) {
-          event.preventDefault();
-          fetch("{% url 'create-payment-intent' product.id %}", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({
-              email: document.getElementById('email').value
-            })
-          })
-            .then(function(result) {
-              return result.json();
-            })
-            .then(function(data) {
-              payWithCard(stripe, card, data.clientSecret);
-            });
-        });
-
-        let payWithCard = function(stripe, card, clientSecret) {
-          loading(true);
-          stripe
-            .confirmCardPayment(clientSecret, {
-              payment_method: {
-                card: card
-              }
-            })
-            .then(function(result) {
-              if (result.error) {
-                showError(result.error.message);
-              } else {
-                orderComplete(result.paymentIntent.id);
-              }
-            });
-        };
-        let orderComplete = function(paymentIntentId) {
-          loading(false);
-          document
-            .querySelector(".result-message a")
-            .setAttribute(
-              "href",
-              "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-            );
-          document.querySelector(".result-message").classList.remove("hidden");
-          document.querySelector("button").disabled = true;
-        };
-        let showError = function(errorMsgText) {
-          loading(false);
-          let errorMsg = document.querySelector("#card-error");
-          errorMsg.textContent = errorMsgText;
-          setTimeout(function() {
-            errorMsg.textContent = "";
-          }, 4000);
-        };
-        let loading = function(isLoading) {
-          if (isLoading) {
-            document.querySelector("button").disabled = true;
-            document.querySelector("#spinner").classList.remove("hidden");
-            document.querySelector("#button-text").classList.add("hidden");
-          } else {
-            document.querySelector("button").disabled = false;
-            document.querySelector("#spinner").classList.add("hidden");
-            document.querySelector("#button-text").classList.remove("hidden");
-          }
-        };
-    
-    </script>
-</html>
-
+      </script>
+    </body>
 {% endblock %}

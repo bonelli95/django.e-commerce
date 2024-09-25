@@ -108,31 +108,32 @@ def bag(request, product_id=None):
 
         return render(request, 'store/bag.html', context)
 
-def buy(request):
-    bag = request.session.get('bag',{})
-    bag_items = []
-
-    for attribute_id, item_data in bag.items():
-        if isinstance(item_data, dict):
-            product = get_object_or_404(Product, id=item_data['product_id'])
-            product_attribute = get_object_or_404(ProductAttribute, id=attribute_id)
-            bag_items.append({
-                'product': product,
-                'quantity': item_data['quantity'],
-                'price': item_data['price'],
-                'total_price': item_data['price'] * item_data['quantity'],
-                'image_url': product.image.url
-            })
-
-    return render(request, 'store/buy.html', {'bag_items': bag_items})
-
 class ProductLandingPageView(TemplateView):
-    template_name = 'landing.html'
+    template_name = 'store/landing.html'
 
     def get_context_data(self, **kwargs ):
-        product = Product.objects.get('product_id')
         context = super(ProductLandingPageView, self).get_context_data(**kwargs)
+        
+        bag = self.request.session.get('bag', {})
+        bag_items = []
+
+        for attribute_id, item_data in bag.items():
+            if isinstance(item_data, dict):
+                product = get_object_or_404(Product, id=item_data['product_id'])
+                product_attribute = get_object_or_404(ProductAttribute, id=attribute_id)
+                bag_items.append({
+                    'product': product,
+                    'quantity': item_data['quantity'],
+                    'price': item_data['price'],
+                    'total_price': item_data['price'] * item_data['quantity'],
+                    'image_url': product.image.url
+                })
+        
+        total_price = sum(item['total_price'] for item in bag_items)
+
         context.update({
+            'total_price': total_price,
+            'bag_items': bag_items,
             'product': product,
             'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY
         })
@@ -141,20 +142,20 @@ class ProductLandingPageView(TemplateView):
     
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
-        product_id = self.kwargs[product_id]
+        product_id = self.kwargs['product_id']
         product = Product.objects.get(id=product_id)
         print(product)
-        YOUR_DOMAIN = 'http://127.0.0.1:8000'
+        YOUR_DOMAIN = settings.YOUR_DOMAIN
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[
                 {
                     'price_data':{
                         'currency': 'euro',
-                        'unit_amount': product.total_price,
+                        'unit_amount': int(product.total_price * 100),
                         'product_data':{
                             'name': product.title,
-                            'images':['http://i.imgur.com/EHyR2nP.png'],
+                            #'images':['http://i.imgur.com/EHyR2nP.png'],
                         },
 
                     },
