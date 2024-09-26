@@ -142,31 +142,34 @@ class ProductLandingPageView(TemplateView):
     
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
-        product_id = self.kwargs['product_id']
-        product = Product.objects.get(id=product_id)
-        print(product)
+        bag = self.request.session.get('bag', {})
+
         YOUR_DOMAIN = settings.YOUR_DOMAIN
+        line_items = []
+
+        for attribute_id, item_data in bag.items():
+            product = get_object_or_404(Product, id=item_data['product_id'])
+            product_attribute = get_object_or_404(ProductAttribute, id=attribute_id)
+            line_items.append({
+                'price_data': {
+                    'currency': 'usd',
+                    'unit_amount': int(product_attribute.price * 100),
+                    'product_data': {
+                        'name': product.title,
+                    },
+                },
+                'quantity': item_data['quantity'],
+            })
+
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data':{
-                        'currency': 'euro',
-                        'unit_amount': int(product.total_price * 100),
-                        'product_data':{
-                            'name': product.title,
-                            #'images':['http://i.imgur.com/EHyR2nP.png'],
-                        },
-
-                    },
-                    'quantity': 1,
-                },
-            ],
+            line_items=line_items,
             mode='payment',
             success_url=YOUR_DOMAIN + '/success.html',
             cancel_url=YOUR_DOMAIN + '/cancel.html',
         )
-        return JsonResponse ({
+        
+        return JsonResponse({
             'id': checkout_session.id
         })
     
