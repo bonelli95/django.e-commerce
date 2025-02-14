@@ -8,7 +8,7 @@ class LoginForms(forms.Form):
         widget = forms.TextInput(
             attrs={
                 'class' : "form-control form-control-lg",
-                "placeholder": "Enter Your Name"
+                "placeholder": "Enter your Name"
             }
         )
     )
