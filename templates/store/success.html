@@ -1,1 +1,23 @@
-<h1>success</h1>
+{% extends 'pystore/base.html' %}
+{% load static %}
+{% block content %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<div class="container">
+	<div class="row text-center">
+        <div class="col-sm-6 col-sm-offset-3">
+        <br><br> <h2 style="color:#0fad00">Success</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="green" class="bi bi-bag-check-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0m-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+          </svg>
+        <h3>Dear, {{ name_user }}</h3>
+        <p style="font-size:20px;color:#5C5C5C;">Thank you for your purchase! We have sent a confirmation email to {{ email_user }} with your details.</p>
+    <br><br>
+        </div>
+        
+	</div>
+</div>
+
+{% endblock %}

@@ -8,6 +8,7 @@ from django.views import View
 from django.http import HttpRequest, JsonResponse
 from django.views.generic import TemplateView
 import stripe
+from django.contrib.auth.decorators import login_required
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -165,19 +166,26 @@ class CreateCheckoutSessionView(View):
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url=YOUR_DOMAIN + '/success.html',
-            cancel_url=YOUR_DOMAIN + '/cancel.html',
+            success_url=YOUR_DOMAIN + 'success/',
+            cancel_url=YOUR_DOMAIN + 'cancel/',
         )
         
         return JsonResponse({
             'id': checkout_session.id
         })
-    
+
+@login_required
 def success(request):
-    return render(request, 'store/success.html')
-    
+    name_user = request.user.username
+    email_user = request.user.email
+    context = {'name_user': name_user, 'email_user': email_user}
+    return render(request, 'store/success.html', context)
+
+@login_required   
 def cancel(request):
-    return render(request, 'store/cancel.html')
+    name_user = request.user.username
+    context = {'name_user': name_user}
+    return render(request, 'store/cancel.html', context)
     
 def clear_bag(request):
     request.session['bag'] = {}
