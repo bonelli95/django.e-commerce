@@ -18,7 +18,7 @@ def index(request):
 
 def categories(request):
     data = Category.objects.all().order_by('-id')
-    return render(request, 'pystore/category_product_list.html', {'data': data})
+    return render(request, 'pystore/categories.html', {'data': data})
 
 def product(request):
     data = Product.objects.all().order_by('-id')
